@@ -11,36 +11,22 @@ export enum TransportType {
   ECHO = 'ECHO',
 }
 
-// export type Transport = {
-//   app?: string;
-//   name: string;
-//   type: TransportType;
-//   config: Record<string, any>;
-//   id?: number;
-//   cuid?: string;
-//   stats?: Record<string, any> | null;
-//   validationContent?: string;
-//   validationAddress?: string;
-//   createdAt?: Date;
-//   updatedAt?: Date | null;
-//   deletedAt?: Date | null;
-// };
-
-export type TransportConfig<T> = {
+export type TransportBase = {
   app?: string;
   name: string;
   type: TransportType;
-  config: T;
-  //id?: number;
- // cuid?: string;
+  config: Record<string, any>;
+  
   stats?: Record<string, any> | null;
-  //createdAt?: Date;
-  //updatedAt?: Date | null;
-  //deletedAt?: Date | null;
+  validationContent?: string;
+  validationAddress?: string;
+
 };
-export type Transport<T> = TransportConfig<T> & CommonFields
-export type CreateAccount<T> = TransportConfig<T>
-export type EditTransport<T> = Partial<TransportConfig<T>>
+
+
+export type Transport = TransportBase& CommonFields
+export type CreateTransport = TransportBase
+export type EditTransport= Partial<CreateTransport>
 
 
 export type TransportSmtpConfig = {

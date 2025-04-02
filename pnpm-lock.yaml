@@ -72,6 +72,9 @@ importers:
       '@workspace/sdk':
         specifier: workspace:*
         version: link:../../packages/sdk
+      class-validator:
+        specifier: ^0.14.1
+        version: 0.14.1
       nest-winston:
         specifier: ^1.10.2
         version: 1.10.2(@nestjs/common@11.0.11(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(winston@3.17.0)
@@ -1663,7 +1666,7 @@ packages:
 
   '@expo/bunyan@4.0.1':
     resolution: {integrity: sha512-+Lla7nYSiHZirgK+U/uYzsLv/X+HaJienbD5AKX1UQZHYfWaP+9uuQluRB4GrEVWF0GZ7vEVp/jzaOT9k/SQlg==}
-    engines: {node: '>=0.10.0'}
+    engines: {'0': node >=0.10.0}
 
   '@expo/cli@0.22.19':
     resolution: {integrity: sha512-vgAM3gUsAUQWgDm10RIYSrWQ5q235Ir/lMUdx5Yd/gObYaDlaBIdsq5H72eJ44QB+4ndvhm2wbqntTI19kBIRw==}
