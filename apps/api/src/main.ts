@@ -34,7 +34,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ResponseTransformInterceptor());
   app.setGlobalPrefix(globalPrefix);
 
-  const port = process.env.PORT || 3333;
+  const port = process.env.PORT || 3334;
 
   const config = new DocumentBuilder()
     .setTitle('Rumsan App')

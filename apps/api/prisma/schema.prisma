@@ -13,24 +13,163 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ++++++++++++++++++ START: @rumsan/extensions/settings +++++++++++++++++++++++++++
-
-model Setting {
-  name           String          @id @unique
-  value          Json
-  dataType       SettingDataType
-  requiredFields String[]
-  isReadOnly     Boolean         @default(false)
-  isPrivate      Boolean         @default(true)
-
-  @@map("tbl_settings")
+enum TransportType {
+  SMTP
+  VOICE
+  API
+  SES
+  ECHO
 }
 
-enum SettingDataType {
-  STRING
-  NUMBER
-  BOOLEAN
-  OBJECT
+enum SessionStatus {
+  NEW
+  PENDING
+  COMPLETED
+  FAILED
 }
 
-// ++++++++++++++++++ END: @rumsan/extensions/settings +++++++++++++++++++++++++++
+enum TriggerType {
+  IMMEDIATE
+  SCHEDULED
+  MANUAL
+}
+
+enum BroadcastStatus {
+  SCHEDULED
+  PENDING
+  SUCCESS
+  FAIL
+}
+
+enum ValidationContent {
+  URL
+  TEXT
+}
+
+enum ValidationAddress {
+  ANY
+  EMAIL
+  PHONE
+}
+
+//TODO https://socket.dev/npm/package/prisma-extension-cuid2
+
+model Transport {
+  id     Int           @id @default(autoincrement())
+  cuid   String        @unique @default(cuid())
+  app    String
+  name   String
+  type   TransportType
+  config Json          @db.JsonB()
+  stats  Json?         @db.JsonB()
+
+  validationContent ValidationContent @default(TEXT)
+  validationAddress ValidationAddress @default(ANY)
+
+  Sessions   Session[]
+  Broadcasts Broadcast[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt()
+  updatedBy String    @default("system")
+  deletedAt DateTime?
+
+  @@map("tbl_transports")
+}
+
+model Session {
+  id             Int           @id @default(autoincrement())
+  cuid           String        @unique @default(cuid())
+  app            String
+  transport      String
+  message        Json          @db.JsonB()
+  addresses      Json          @db.JsonB()
+  maxAttempts    Int           @default(1)
+  triggerType    TriggerType   @default(IMMEDIATE)
+  webhook        String?
+  options        Json?         @db.JsonB()
+  status         SessionStatus @default(NEW)
+  totalAddresses Int
+  stats          Json?         @db.JsonB()
+
+  Transport  Transport      @relation(fields: [transport], references: [cuid])
+  Broadcasts Broadcast[]
+  Logs       BroadcastLog[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt()
+  updatedBy String    @default("system")
+  deletedAt DateTime?
+
+  @@map("tbl_sessions")
+}
+
+model Broadcast {
+  id          Int             @id @default(autoincrement())
+  cuid        String          @unique @default(cuid())
+  app         String
+  session     String
+  transport   String
+  address     String
+  status      BroadcastStatus @default(SCHEDULED)
+  maxAttempts Int             @default(1)
+  disposition Json?           @db.JsonB()
+  attempts    Int             @default(0)
+  isComplete  Boolean @default(false)
+  lastAttempt DateTime?
+
+  Session   Session   @relation(fields: [session], references: [cuid])
+  Transport Transport @relation(fields: [transport], references: [cuid])
+
+  Logs BroadcastLog[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt()
+
+  @@map("tbl_broadcasts")
+}
+
+model BroadcastLog {
+  id        Int             @id @default(autoincrement())
+  cuid      String          @unique @default(cuid())
+  app       String
+  session   String
+  broadcast String
+  status    BroadcastStatus @default(PENDING)
+  attempt   Int
+  details   Json?           @db.JsonB()
+  notes     String?
+
+  Broadcast Broadcast @relation(fields: [broadcast], references: [cuid])
+  Session   Session   @relation(fields: [session], references: [cuid])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt()
+
+  @@map("tbl_broadcast_logs")
+}
+
+// ++++++++++++++++++ START: @rumsan/extensions/apps +++++++++++++++++++++++++++
+enum ApplicationEnvironment {
+  PRODUCTION
+  STAGING
+  DEVELOPMENT
+  TEST
+}
+
+model Application {
+  cuid        String                 @id @default(cuid())
+  name        String
+  publicKey   String
+  description String?
+  environment ApplicationEnvironment
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  updatedBy String    @default("system")
+  deletedAt DateTime?
+
+  @@map("tbl_applications")
+}
+
+// ++++++++++++++++++ END: @rumsan/extensions/apps ++++++++++++++++++++++++++++++++
