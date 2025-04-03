@@ -1,12 +1,31 @@
-// import { IsBoolean, IsIn } from 'class-validator';
-// import { PaginationDto } from '../../utils/pagination.dto';
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { Pagination } from '@workspace/sdk/types/pagination.type';
+import { IsBoolean, IsIn, IsNumber } from 'class-validator';
 
-// export class ListTransportDto extends PaginationDto {
-//   @IsIn(['createdAt'])
-//   override sort: string = 'createdAt';
 
-//   override order: 'asc' | 'desc' = 'desc';
+export class ListTransportDto implements Pagination {
 
-//   @IsBoolean()
-//   includeDeleted?: boolean = false;
-// }
+ @ApiPropertyOptional({ example: 1 })
+    @IsNumber()
+ page?: number;
+    
+       @ApiPropertyOptional({ example: '10' })
+    @IsNumber()
+    perPage?: number;
+
+  @IsIn(['createdAt'])
+  sort: string = 'createdAt';
+
+    order: 'asc' | 'desc' = 'desc';
+    
+
+  @IsBoolean()
+  includeDeleted?: boolean = false;
+
+
+
+
+
+
+
+}
