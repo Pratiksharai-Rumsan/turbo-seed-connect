@@ -32,6 +32,7 @@
     "@workspace/eslint-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
     "@workspace/sdk": "workspace:*",
+    "@workspace/queue": "workspace:*",
     "@nestjs/schedule": "^4.1.0",
     "@nestjs/sequelize": "^10.0.1",
     "@nestjs/swagger": "^7.4.0",

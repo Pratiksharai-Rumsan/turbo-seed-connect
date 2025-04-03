@@ -93,6 +93,9 @@ importers:
       '@workspace/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
+      '@workspace/queue':
+        specifier: workspace:*
+        version: link:../../packages/queue
       '@workspace/sdk':
         specifier: workspace:*
         version: link:../../packages/sdk
@@ -514,11 +517,33 @@ importers:
         specifier: ^8.15.0
         version: 8.29.0(eslint@9.23.0(jiti@1.21.7))(typescript@5.8.2)
 
+  packages/queue:
+    dependencies:
+      '@nestjs/common':
+        specifier: ^10.0.2
+        version: 10.4.15(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.2)
+      '@workspace/sdk':
+        specifier: workspace:*
+        version: link:../sdk
+      amqp-connection-manager:
+        specifier: ^4.1.14
+        version: 4.1.14(amqplib@0.10.7)
+    devDependencies:
+      '@workspace/typescript-config':
+        specifier: workspace:^
+        version: link:../typescript-config
+      typescript:
+        specifier: latest
+        version: 5.8.2
+
   packages/sdk:
     dependencies:
+      '@nestjs/common':
+        specifier: ^10.0.2
+        version: 10.4.15(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.2)
       '@rumsan/sdk':
-        specifier: ^0.1.152
-        version: 0.1.158
+        specifier: ^0.0.45
+        version: 0.0.45
       axios:
         specifier: ^1.7.9
         version: 1.8.4
@@ -3766,9 +3791,6 @@ packages:
 
   '@rumsan/sdk@0.1.152':
     resolution: {integrity: sha512-nyojB4JiMM9MT3NhKX1ZS9574AmiXgGSKTldjrshDOllgk8DRUkiA+y/Lkwf1QrbN5Bq+kNFd7C2gvrvNicgUw==, tarball: https://npm.pkg.github.com/download/@rumsan/sdk/0.1.152/5030b0d1589a07e951678af164a844a9e718569b}
-
-  '@rumsan/sdk@0.1.158':
-    resolution: {integrity: sha512-Kc2ItkxRHcPcb8xLztj0IrqGIalD5X+ig1Jy0FLY9INIDV9I3LGhTwLy8rjFlbAMhNVpu6Kt5zK8Y7xxn9//7w==, tarball: https://npm.pkg.github.com/download/@rumsan/sdk/0.1.158/8c1dc897f457b85b43de7697cd7faa67cb36f418}
 
   '@scure/base@1.2.4':
     resolution: {integrity: sha512-5Yy9czTO47mqz+/J8GM6GIId4umdCk1wc1q8rKERQulIoc8VP9pzDcghv10Tl2E7R96ZUx/PhND3ESYUQX8NuQ==}
@@ -16268,10 +16290,6 @@ snapshots:
   '@rumsan/sdk@0.1.107': {}
 
   '@rumsan/sdk@0.1.152': {}
-
-  '@rumsan/sdk@0.1.158':
-    dependencies:
-      http-status-codes: 2.3.0
 
   '@scure/base@1.2.4': {}
 

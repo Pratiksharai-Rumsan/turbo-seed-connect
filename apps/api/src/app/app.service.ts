@@ -1,9 +1,9 @@
 import {Injectable} from '@nestjs/common';
-import {EventEmitter2} from '@nestjs/event-emitter';
+//import {EventEmitter2} from '@nestjs/event-emitter';
 
 @Injectable()
 export class AppService {
-  constructor(private readonly eventEmitter: EventEmitter2) {}
+  constructor(private readonly eventEmitter: any) {}
 
   ping() {
     return {

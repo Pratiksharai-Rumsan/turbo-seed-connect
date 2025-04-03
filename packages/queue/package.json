@@ -1,0 +1,30 @@
+{
+  "name": "@workspace/queue",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@workspace/typescript-config": "workspace:^",
+    "typescript": "latest"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.0.2",
+    "amqp-connection-manager": "^4.1.14",
+    "@workspace/sdk": "workspace:*"
+  }
+}
