@@ -12,9 +12,12 @@
   "exports": {
     ".": "./src/index.ts",
     "./clients/*": "./src/clients/*.ts",
+    "./clients": "./src/clients/index.ts",
     "./constants/*": "./src/constants/*.ts",
+    "./constants": "./src/constants/index.ts",
     "./dtos/*": "./src/dtos/*.ts",
     "./types/*": "./src/types/*.ts",
+    "./types": "./src/types/index.ts",
     "./utils/*": "./src/utils/*.ts"
   },
   "dependencies": {

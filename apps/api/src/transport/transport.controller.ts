@@ -43,9 +43,9 @@ export class TransportController {
   @ApiOperation({
     summary: 'Get all transports for the app',
   })
-  findAll(@AppId() appId: string, @Query() dto: ListTransportDto) {
-    return this.transportService.findAll(appId, dto);
-  }
+  // findAll(@AppId() appId: string, @Query() dto: ListTransportDto) {
+  //   return this.transportService.findAll(appId, dto);
+  // }
 
   @Get(':cuid')
   @ApiOperation({

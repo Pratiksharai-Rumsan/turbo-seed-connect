@@ -1,30 +1,31 @@
-import {Module} from '@nestjs/common';
+import { BullModule } from '@nestjs/bull';
+import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import {BullModule } from  '@nestjs/bull'
+
+
+import { RumsanAppModule } from '@rumsan/app';
+import { PrismaModule } from '@rumsan/prisma';
+import { QueueModule } from "@workspace/queue";
+import { AmqpModule} from "@workspace/workers"
+
+
+import { TransportModule } from '../transport/transport.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 import amqp from 'amqp-connection-manager';
 import { Channel } from 'amqplib';
-
-import { DemoModule } from 'src/demo/demo.module';
-import { RumsanAppModule } from '@rumsan/app';
-import { PrismaModule } from '@rumsan/prisma';
-import {ListenerModule} from '../listeners/listener.module';
-import {AppController} from './app.controller';
-import { AppService } from './app.service';
-import { TransportModule } from '../transport/transport.module';
-import { WebSocketService } from './websocket.service';
-import {QueueModule } from "@workspace/queue"
-import { config } from 'process';
+import { QUEUES } from '@workspace/sdk/constants/events';
 
 @Module({
   imports: [
     ConfigModule.forRoot({isGlobal: true}),
    
-    DemoModule,
+  
     TransportModule,
     PrismaModule,
   RumsanAppModule,
-    ListenerModule,
+
     QueueModule,
     BullModule.forRootAsync({
       imports: [ConfigModule],
@@ -47,9 +48,35 @@ import { config } from 'process';
       })
 
 
-  })
+    }),
+    AmqpModule.forRootAsync({
+
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService:ConfigService) => {
+        const connection = amqp.connect(configService.get('AMQP_URL'));
+        return connection.createChannel({
+          setup: (channel: Channel) => {
+            
+            channel.assertQueue(QUEUES.TRANSPORT_API, { durable: true });
+            channel.assertQueue(QUEUES.TRANSPORT_SMTP, { durable: true });
+            channel.assertQueue(QUEUES.TRANSPORT_VOICE, { durable: true });
+            channel.assertQueue(QUEUES.TRANSPORT_API, { durable: true });
+            channel.assertQueue(QUEUES.TO_CONNECT, { durable: true });
+            
+}
+
+
+
+
+        })
+      }
+
+
+    })
+    
   ],
   controllers: [AppController],
-  providers: [AppService, WebSocketService],
+  providers: [AppService,],
 })
 export class AppModule {}

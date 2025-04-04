@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { createId } from '@paralleldrive/cuid2';
-import { Transport } from '@prisma/client';
+//import { Transport } from '@prisma/client';
 import { paginator, PaginatorTypes, PrismaService } from '@rumsan/prisma';
 import { CreateTransportDto } from './dto/create-transport.dto';
 import { ListTransportDto } from './dto/list-transport.dto';
 import { UpdateTransportDto } from './dto/update-transport.dto';
+
 
 const paginate: PaginatorTypes.PaginateFunction = paginator({ perPage: 20 });
 
@@ -63,7 +64,7 @@ export class TransportService {
   remove(cuid: string) {
     return this.prisma.transport.update({
       where: { cuid },
-      data: { config: null, deletedAt: new Date() },
+      data: { config: {}, deletedAt: new Date() },
     });
   }
 }
